@@ -4,7 +4,7 @@ Hi there!
 
 I am Hongtao, a student from #link("https://www.washington.edu/")[UW] and #link("https://www.wisc.edu/")[UW]. 
 
-I am a first year PhD student in the #link("https://www.cs.washington.edu/")[Paul G. Allen School of Computer Science & Engineering] at University of Washington, advised by the #link("https://www.cs.washington.edu/people/faculty/arvind")[Arvind Krishnamurthy] in the amazing #link("https://syslab.cs.washington.edu/")[System Lab]. We also collaborate extensively with #link("https://pages.cs.wisc.edu/~mgliu/")[Ming Liu].
+I am a first year PhD student in the #link("https://www.cs.washington.edu/")[Paul G. Allen School of Computer Science & Engineering] at University of Washington, advised by #link("https://www.cs.washington.edu/people/faculty/arvind")[Arvind Krishnamurthy] in the amazing #link("https://syslab.cs.washington.edu/")[System Lab]. We also collaborate extensively with #link("https://pages.cs.wisc.edu/~mgliu/")[Ming Liu].
 
 I build systems that exploit the hardware potential via software. My current research focus are in creating an abstraction over the SmartNICs and the hardware resources on top of it. During my undergrad, I created locks that achieves both #link("https://research.cs.wisc.edu/wind/Publications/eurosys20-scl.pdf", [usage fairness]) and high throughput based on delegation.
 
