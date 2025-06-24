@@ -13,6 +13,8 @@ const normalizedBaseUrl = normalizePath(baseUrl);
 
 const isHomePage = normalizedCurrentPath === normalizedBaseUrl || normalizedCurrentPath === '';
 const isAnyBlogPage = currentPath.includes('/blog');
+
+import  SpeedInsights  from "@vercel/speed-insights/astro"
 ---
 
 <header>
