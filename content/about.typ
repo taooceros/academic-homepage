@@ -10,7 +10,7 @@ I build systems that exploit the hardware potential via software. My current res
 
 Prior to joining UW, I received my B.S. with Honors in _Computer Science_ and _Mathematics_ from University of Wisconsin-Madison, under the guidance of the wonderful #link("https://pages.cs.wisc.edu/~remzi/")[Remzi Arpaci-Dusseau]. I also have the great fortune to meet and be friends with many other cool professors there: #link("https://wrightstephen.github.io/sw_proj/", [Stephen Wright]), #link("https://pages.cs.wisc.edu/~dieter/")[Dieter van Melkebeek], #link("https://www.ewbates.com/")[Erik Bates], #link("https://people.math.wisc.edu/~apisa/")[Paul Apisa], and many more... (Curious? Check out #link("blog/uw-madison-course"))
 
-I have the great fortune to be part of the amazing #link("flowlauncher.com")[Flow Launcher] team, where we are trying to create the best application launcher for windows.
+I have the great fortune to be part of the amazing #link("https://flowlauncher.com")[Flow Launcher] team, where we are trying to create the best application launcher for windows.
 
 
 #link("https://github.com/taooceros")[github] / #link("/xxx.pdf")[cv]
