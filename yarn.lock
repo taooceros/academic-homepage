@@ -682,6 +682,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@myriaddreamin/typst-ts-renderer@npm:^0.7.0-rc1":
+  version: 0.7.0-rc1
+  resolution: "@myriaddreamin/typst-ts-renderer@npm:0.7.0-rc1"
+  checksum: 10c0/62f5717d5075d9cf3973521488ebd84cf547bc7de3f4a52705e90cb4588b6033bb42bcf095e0d67e6d68450daa1f583d28b5b664e1ea0ff9207974d1077f4cec
+  languageName: node
+  linkType: hard
+
+"@myriaddreamin/typst-ts-web-compiler@npm:^0.7.0-rc1":
+  version: 0.7.0-rc1
+  resolution: "@myriaddreamin/typst-ts-web-compiler@npm:0.7.0-rc1"
+  checksum: 10c0/0a2803a62080bb1babde0a2375c91e49f6cbc406a57977ba7736e1425b4d62f83df87f2e875695fa1a0113afe31ad6122c29fec2e5fa537f53d06b85bafb97b8
+  languageName: node
+  linkType: hard
+
 "@myriaddreamin/typst.ts@npm:0.6.0":
   version: 0.6.0
   resolution: "@myriaddreamin/typst.ts@npm:0.6.0"
@@ -696,6 +710,23 @@ __metadata:
     "@myriaddreamin/typst-ts-web-compiler":
       optional: true
   checksum: 10c0/f298c84ff7645ca77c68f0466c6654a748caf46f876c9d40858d123e3413989ecaf6546712e191c1469d11cb0c239571a68fac9fd6fc00c9c3a135ab9f990be6
+  languageName: node
+  linkType: hard
+
+"@myriaddreamin/typst.ts@npm:^0.7.0-rc1":
+  version: 0.7.0-rc1
+  resolution: "@myriaddreamin/typst.ts@npm:0.7.0-rc1"
+  dependencies:
+    idb: "npm:^7.1.1"
+  peerDependencies:
+    "@myriaddreamin/typst-ts-renderer": ^0.7.0-rc1
+    "@myriaddreamin/typst-ts-web-compiler": ^0.7.0-rc1
+  peerDependenciesMeta:
+    "@myriaddreamin/typst-ts-renderer":
+      optional: true
+    "@myriaddreamin/typst-ts-web-compiler":
+      optional: true
+  checksum: 10c0/ca5e7cb2352ef96a3d9daa34b20541c12a0c779315a5e2bbe44fe4d47b29772d9c60f1be9cf85c15963920389cfa79834bdcd8d7b3d595b0a39a432331d2394e
   languageName: node
   linkType: hard
 
@@ -1145,6 +1176,9 @@ __metadata:
   dependencies:
     "@astrojs/sitemap": "npm:^3.6.0"
     "@babel/parser": "npm:^7.28.5"
+    "@myriaddreamin/typst-ts-renderer": "npm:^0.7.0-rc1"
+    "@myriaddreamin/typst-ts-web-compiler": "npm:^0.7.0-rc1"
+    "@myriaddreamin/typst.ts": "npm:^0.7.0-rc1"
     "@vercel/speed-insights": "npm:^1.2.0"
     astro: "npm:^5.15.3"
     astro-typst: "npm:^0.9.2"
