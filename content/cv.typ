@@ -31,17 +31,21 @@
   // [],[],
 )
 
+=== 📚 Research Interests
 
+- High Performance Interconnect
+- Abstraction over Emerging Heterogeneous Hardware
+- IO-Virtualization for Offloadable Container Runtime
 
 === 🎓 Education
-- _Ph.D. in Computer Science_, University of Washington, Seattle, WA #h(1fr), Mar 2025 -- Present\
-- _B.S. in Computer Science_, University of Wisconsin-Madison, Madison, WI #h(1fr), Jan 2021 -- Dec 2024 \
 
+- _Ph.D. in Computer Science_, University of Washington, Seattle, WA, Mar 2025 -- Present\
+- _B.S. in Computer Science_, University of Wisconsin-Madison, Madison, WI, Jan 2021 -- Dec 2024 \
 
 === 🎖️ Awards & Honors
 
-- Hilldale Undergraduate Research Fellowship (2022)
-- David Dewitt Scholarship (2021)
+- Hilldale Undergraduate Research Fellowship (2022, Madison)
+- David Dewitt Scholarship (2021, Madison)
 
 
 
