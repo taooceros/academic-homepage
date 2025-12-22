@@ -24,7 +24,7 @@
 
 
 body {
-  --vp-font-family-base: "Source Sans Pro", "Source Sans Pro Variable", "Noto Sans SC",
+  --vp-font-family-base: "Inter", "Source Sans Pro", "Source Sans Pro Variable", "Noto Sans SC",
     "PingFang SC", "Microsoft Yahei", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --vp-font-family-mono: ui-monospace, "Menlo", "Monaco", "Consolas",
@@ -39,11 +39,9 @@ body {
   word-wrap: break-word;
   overflow-wrap: break-word;
   color: var(--main-color);
-  line-height: 1.6;
+  line-height: 1.7;
   font-weight: 300;
-  font-size: 0.9rem;
-  letter-spacing: 300;
-  text-shadow: 0 0 0.5px rgba(57, 57, 57, 0.25);
+  font-size: 0.95rem;
 }
 
 
@@ -53,17 +51,21 @@ main,
   margin: auto;
   overflow-x: hidden;
 }
+
 main {
   padding: 3em 1em;
 }
+
 @media (max-width: 720px) {
   main {
     padding: 1em;
   }
+
   body {
     text-align: left;
   }
 }
+
 :root {
   --heading-hash-offset-1: 1.75rem;
   --heading-hash-offset-2: 1.75rem;
@@ -80,6 +82,7 @@ h5 :target,
 h6 :target {
   scroll-margin-top: 1.25em;
 }
+
 h1 {
   font-size: 2.75em;
   margin-block-start: 0em;
@@ -88,6 +91,7 @@ h1 {
   margin-inline-end: 0px;
   line-height: 1.1111111;
 }
+
 h2 {
   font-size: 2em;
   margin-block-start: 1.6em;
@@ -96,6 +100,7 @@ h2 {
   margin-inline-end: 0px;
   line-height: 1.3333333;
 }
+
 h3 {
   font-size: 1.5em;
   margin-block-start: 1.0em;
@@ -104,6 +109,7 @@ h3 {
   margin-inline-end: 0px;
   line-height: 1.2;
 }
+
 h4 {
   font-size: 1.25em;
   margin-block-start: 1.0em;
@@ -113,6 +119,7 @@ h4 {
   line-height: 1.2;
   font-weight: 600;
 }
+
 h5 {
   font-size: 1.1em;
   margin-block-start: 1.5em;
@@ -121,46 +128,56 @@ h5 {
   margin-inline-end: 0px;
   line-height: 1.5;
 }
+
 p {
   margin-block-end: 0.5em;
 }
+
 strong,
 b {
   font-weight: 400;
 }
+
 a,
 .link {
   color: var(--accent);
   text-decoration: none;
   cursor: pointer;
 }
+
 a,
 .link {
   transition: color 0.1s, underline 0.1s;
 }
+
 a:hover,
 .link:hover {
   color: var(--accent);
   text-decoration: underline solid 0.5px;
 }
+
 textarea {
   width: 100%;
   font-size: 16px;
 }
+
 input {
   font-size: 16px;
 }
+
 img {
   max-width: 100%;
   height: auto;
   border-radius: 8px;
 }
+
 pre,
 code,
 kbd,
 samp {
   font-family: var(--vp-font-family-mono);
 }
+
 /* 
 code {
   padding: 0 0 0 0em;
@@ -222,6 +239,7 @@ blockquote {
   margin: 0px;
   font-size: 1em;
 }
+
 hr {
   border: none;
   border-top: 1px solid var(--raw-bg-color);
@@ -244,21 +262,25 @@ hr {
   /* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
   white-space: nowrap;
 }
+
 nav a,
 .social-links a {
   text-decoration: none;
   color: var(--main-color);
 }
+
 nav a:hover,
 .social-links a:hover {
   color: var(--main-hover-color);
   text-decoration: none;
 }
+
 .icon svg {
   width: 32px;
   height: 32px;
   overflow: visible;
 }
+
 .icon svg path,
 .icon svg circle {
   fill: currentColor;
@@ -270,40 +292,47 @@ nav a:hover,
 figcaption {
   text-align: center;
 }
+
 .code-image svg {
   max-width: 100%;
   height: fit-content;
 }
+
 .inline-equation {
   display: inline-block;
   width: fit-content;
   margin: 0 0.15em;
   font-family: "New Computer Modern Math", "Latin Modern Math", "STIX Two Math", "TeX Gyre Termes Math", "DejaVu Math TeX Gyre", math;
 }
+
 .block-equation {
   display: grid;
   place-items: center;
   overflow-x: auto;
   font-family: "New Computer Modern Math", "Latin Modern Math", "STIX Two Math", "TeX Gyre Termes Math", "DejaVu Math TeX Gyre", math;
 }
+
 .block-list,
 .block-list li {
   margin: 0;
   padding: 0;
 }
-.block-list > li {
+
+.block-list>li {
   list-style: none;
   margin-top: 0.0em;
   padding-left: 0.0em;
   border-left: 2.5px solid var(--main-color);
 }
-.block-list > li > h4 {
+
+.block-list>li>h4 {
   list-style: none;
   margin-top: 0.0em;
   padding-left: 0.5em;
   border-left: 2.5px solid var(--main-color);
 }
-.block-list.accent > li {
+
+.block-list.accent>li {
   border-left: 2.5px solid var(--accent);
 }
 
@@ -346,7 +375,7 @@ ul.tags a:hover {
 }
 
 /* Compact Post List Styles */
-.posts.block-list > li {
+.posts.block-list>li {
   margin-top: 0.4rem;
   padding-left: 0.5rem;
   padding-bottom: 0.2rem;
@@ -403,7 +432,8 @@ ul.tags a:hover {
 }
 
 .posts .tags ul::-webkit-scrollbar {
-  display: none; /* Hide scrollbar in WebKit browsers */
+  display: none;
+  /* Hide scrollbar in WebKit browsers */
 }
 
 .posts .tags li {
@@ -424,7 +454,7 @@ ul.tags a:hover {
 
 
 
-.posts li > p,
+.posts li>p,
 .posts .description {
   margin: 0.1rem 0 0 0;
   font-size: 0.75rem;
@@ -441,21 +471,21 @@ ul.tags a:hover {
     align-items: flex-start;
     gap: 0.1rem;
   }
-  
+
   .posts .heading h2,
   .posts .heading h4 {
     font-size: 0.85rem;
   }
-  
+
   .posts .date {
     font-size: 0.65rem;
   }
-  
-  .posts.block-list > li {
+
+  .posts.block-list>li {
     margin-top: 0.3rem;
     padding-left: 0.4rem;
   }
-  
+
 
 }
 
@@ -470,7 +500,7 @@ header {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 0.5px solid rgba(var(--gray-color), 0.1);
-  box-shadow: 
+  box-shadow:
     0 1px 3px rgba(0, 0, 0, 0.05),
     0 1px 2px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
@@ -515,11 +545,8 @@ header nav {
 
 .logo-text {
   color: var(--main-color);
-  font-weight: 300;
-  font-size: 1.5rem;
-  letter-spacing: -0.02em;
-  /* transition: color 0.3s ease; */
-  text-shadow: 0 0 3px rgba(58, 57, 57, 0.25);
+  font-weight: 500;
+  font-size: 1.6rem;
 }
 
 /* Navigation Links */
@@ -566,7 +593,7 @@ header nav {
 .nav-link:hover {
   color: var(--accent);
   transform: translateY(-2px);
-  box-shadow: 
+  box-shadow:
     0 4px 12px rgba(var(--accent), 0.15),
     0 2px 4px rgba(var(--accent), 0.1);
 }
@@ -576,7 +603,6 @@ header nav {
   z-index: 1;
   transition: all 0.3s ease;
   font-weight: 300;
-  text-shadow: 0 0 3px rgba(58, 57, 57, 0.25);
 }
 
 .nav-indicator {
@@ -715,7 +741,8 @@ footer .social-links {
 }
 
 .about-content {
-  min-width: 0; /* Allows text to wrap properly */
+  min-width: 0;
+  /* Allows text to wrap properly */
 }
 
 .about-image {
@@ -730,7 +757,7 @@ footer .social-links {
   object-fit: cover;
   border-radius: 12px;
   margin-top: 2rem;
-  box-shadow: 
+  box-shadow:
     0 4px 6px rgba(0, 0, 0, 0.1),
     0 1px 3px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -738,7 +765,7 @@ footer .social-links {
 
 .profile-photo:hover {
   transform: translateY(-2px);
-  box-shadow: 
+  box-shadow:
     0 8px 25px rgba(0, 0, 0, 0.15),
     0 3px 6px rgba(0, 0, 0, 0.1);
 }
@@ -750,12 +777,13 @@ footer .social-links {
     gap: 2rem;
     text-align: center;
   }
-  
+
   .about-image {
-    order: -1; /* Show image first on mobile */
+    order: -1;
+    /* Show image first on mobile */
     justify-content: center;
   }
-  
+
   .profile-photo {
     width: 120px;
     height: 150px;
@@ -766,7 +794,7 @@ footer .social-links {
   .about-container {
     gap: 1.5rem;
   }
-  
+
   .profile-photo {
     width: 100px;
     height: 125px;
@@ -789,7 +817,7 @@ footer .social-links {
   text-align: left;
 }
 
-.outline + hr {
+.outline+hr {
   margin-bottom: 1em;
 }
 
@@ -922,12 +950,12 @@ dt {
 section:not([aria-label="CV"]) th,
 .blog-post th {
   color: #444;
-  background-color: #f8f8f8; 
+  background-color: #f8f8f8;
 }
 
 section:not([aria-label="CV"]) table tr:nth-child(2n),
 .blog-post table tr:nth-child(2n) {
-  background-color: #fdfdfd; 
+  background-color: #fdfdfd;
 }
 
 /* Responsive table handling for mobile */
@@ -937,13 +965,13 @@ section:not([aria-label="CV"]) table tr:nth-child(2n),
     -webkit-overflow-scrolling: touch;
     width: 100%;
   }
-  
+
   section:not([aria-label="CV"]) table,
   .blog-post table {
     min-width: max-content;
     margin: 0.5rem auto;
   }
-  
+
   section:not([aria-label="CV"]) th,
   section:not([aria-label="CV"]) td,
   .blog-post th,
@@ -1154,7 +1182,7 @@ section:not([aria-label="CV"]) table tr:nth-child(2n),
     flex-direction: column;
     gap: 0.25rem;
   }
-  
+
   .header-container {
     padding: 0 1rem;
   }
@@ -1257,14 +1285,14 @@ section:not([aria-label="CV"]) table tr:nth-child(2n),
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: 0.001dpcm) {
   .mathyml-align-right {
-      text-align: -webkit-right;
-      padding-left: 0em;
-      padding-right: 0em;
+    text-align: -webkit-right;
+    padding-left: 0em;
+    padding-right: 0em;
   }
 
   .mathyml-align-left {
-      text-align: -webkit-left;
-      padding-left: 0em;
-      padding-right: 0em;
+    text-align: -webkit-left;
+    padding-left: 0em;
+    padding-right: 0em;
   }
 }
