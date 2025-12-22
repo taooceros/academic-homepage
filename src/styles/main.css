@@ -775,7 +775,6 @@ footer .social-links {
   .about-container {
     grid-template-columns: 1fr;
     gap: 2rem;
-    text-align: center;
   }
 
   .about-image {
@@ -783,21 +782,11 @@ footer .social-links {
     /* Show image first on mobile */
     justify-content: center;
   }
-
-  .profile-photo {
-    width: 120px;
-    height: 150px;
-  }
 }
 
 @media (max-width: 480px) {
   .about-container {
     gap: 1.5rem;
-  }
-
-  .profile-photo {
-    width: 100px;
-    height: 125px;
   }
 }
 
