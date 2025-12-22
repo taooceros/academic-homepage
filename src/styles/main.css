@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+
+
 /*
   The CSS in this style tag is based off of Bear Blog's default CSS.
   https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
@@ -20,7 +24,6 @@
   --codeblockborder: rgba(85, 131, 217, 0.3);
   --codeblockbg: rgba(54, 108, 209, 0.01);
 }
-
 
 
 body {
@@ -1180,6 +1183,8 @@ section:not([aria-label="CV"]) table tr:nth-child(2n),
     gap: 0.5rem;
   }
 }
+
+
 
 /* Navigation Link Override Styles - Simple effects only */
 /* Completely override all main.css nav-link effects */
