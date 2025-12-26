@@ -1,6 +1,6 @@
 #import "/content/blog.typ": *
 #import "/src/3rd_party/mathyml/lib.typ" as mathyml
-#import mathyml.prelude:*
+#import mathyml.prelude: *
 
 #show: main.with(
   title: "UW-Madison Course",
@@ -12,4 +12,9 @@
   ),
 )
 
+There are a lot of fun learning and teaching at UW-Madison.
+
+#outline()
+
+= Math 431/632
 

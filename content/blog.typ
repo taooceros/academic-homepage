@@ -3,16 +3,12 @@
 #let main(
   title: "Untitled",
   desc: [This is a blog post.],
-  date: "2025-06-08",
+  date: none,
   tags: (),
-  show-outline: true,
   body,
   author: "Hongtao Zhang",
 ) = {
-
   show: it => {
-    
-
     // Generate metadata for Astro content collections
     [
       #metadata((
@@ -27,15 +23,17 @@
     // set basic document metadata
     set document(
       author: author,
-      title: title,
+      title: "111",
     )
+
+    set outline(title: "Outline")
 
 
     // math rules
     show math.equation: set text(weight: 500)
     // show math.equation: to-mathml
     show math.equation: try-to-mathml
-    
+
 
     // Footnotes
     show: it => {
@@ -46,22 +44,15 @@
       it
     }
 
-
-    // Main body.
-    outline(title:"", indent: auto)
     set par(justify: true)
     it
-
   }
 
 
-
-
-
   body
-  
 
-  context{
+
+  context {
     query(footnote)
       .enumerate()
       .map(((idx, it)) => {
@@ -75,5 +66,4 @@
       })
       .join()
   }
-
 }
