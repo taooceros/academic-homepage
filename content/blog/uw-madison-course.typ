@@ -4,7 +4,7 @@
 
 #show: main.with(
   title: "UW-Madison Course",
-  desc: "UW-Madison Course",
+  desc: "My retrospective of UW-Madison courses.",
   date: "2025-06-08",
   tags: (
     "undergrad",

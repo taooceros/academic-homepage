@@ -20,71 +20,49 @@ const sortedPosts = blogPosts.sort(
 		/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Blog - Academic Homepage</title>
+		<title>Blog - Hongtao Zhang</title>
 
 		<Header />
 	</head>
 	<body>
-		<main>
+		<main class="blog-main">
 			{
 				sortedPosts.length === 0 ? (
 					<p class="empty-state">
 						No blog posts yet. Check back soon!
 					</p>
 				) : (
-					<ul class="posts block-list compact">
+					<div class="post-grid">
 						{sortedPosts.map((post) => (
-							<li>
-								<div class="heading">
-									<h4>
-										<a
-											href={`${import.meta.env.BASE_URL}blog/${post.id}`}
+							<article class="post-card-wrapper">
+								<a
+									href={`${import.meta.env.BASE_URL}blog/${post.id}`}
+									class="post-card"
+								>
+									<div class="post-meta">
+										<time
+											datetime={post.data.date.toISOString()}
 										>
-											{post.data.title}
-										</a>
-									</h4>
-									<time
-										class="date"
-										datetime={post.data.date.toISOString()}
-									>
-										{post.data.date.toLocaleDateString(
-											"en-US",
-											{
-												year: "numeric",
-												month: "short",
-												day: "numeric",
-											},
-										)}
-									</time>
-								</div>
-
-								{post.data.description && (
-									<p class="description">
-										{post.data.description}
-									</p>
-								)}
-
-								{post.data.tags &&
-									post.data.tags.length > 0 && (
-										<div class="tags">
-											<ul>
-												{post.data.tags.map(
-													(tag: string) => (
-														<li>
-															<a
-																href={`#tag-${tag}`}
-															>
-																{tag}
-															</a>
-														</li>
-													),
-												)}
-											</ul>
-										</div>
+											{post.data.date.toLocaleDateString(
+												"en-US",
+												{
+													year: "numeric",
+													month: "short",
+													day: "numeric",
+												},
+											)}
+										</time>
+									</div>
+									<h3>{post.data.title}</h3>
+									{post.data.description && (
+										<p class="post-description">
+											{post.data.description}
+										</p>
 									)}
-							</li>
+								</a>
+							</article>
 						))}
-					</ul>
+					</div>
 				)
 			}
 		</main>
