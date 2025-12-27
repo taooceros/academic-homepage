@@ -1,80 +1,68 @@
 ---
 import { getCollection } from "astro:content";
-import Header from "../components/Header.astro";
-import "../styles/main.css";
+import Layout from "../layouts/Layout.astro";
 
 // Get all blog posts and sort by date (newest first)
 const blogPosts = await getCollection("blog");
 const sortedPosts = blogPosts.sort(
-	(a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+    (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
 );
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link
-			rel="icon"
-			type="image/svg+xml"
-			href={`${import.meta.env.BASE_URL}favicon.svg`}
-		/>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Blog - Hongtao Zhang</title>
+<Layout title="Blog - Hongtao Zhang">
+    <main class="max-w-[900px] mx-auto py-16 px-6">
+        {
+            sortedPosts.length === 0 ? (
+                <p class="text-center text-[var(--gray-color)] text-lg">
+                    No blog posts yet. Check back soon!
+                </p>
+            ) : (
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 list-none p-0">
+                    {sortedPosts.map((post) => (
+                        <article class="flex">
+                            <a
+                                href={`${import.meta.env.BASE_URL}blog/${post.id}`}
+                                class="flex flex-col p-8 bg-[var(--paper-card-bg)] rounded-2xl transition-all duration-300 relative no-underline text-inherit border border-black/5 overflow-hidden hover:-translate-y-1 hover:bg-black/5 hover:shadow-2xl group"
+                            >
+                                {post.data.image && (
+                                    <div class="-m-8 mb-0 h-[200px] overflow-hidden">
+                                        <img
+                                            src={post.data.image}
+                                            alt={post.data.title}
+                                            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                        />
+                                    </div>
+                                )}
 
-		<Header />
-	</head>
-	<body>
-		<main class="blog-main">
-			{
-				sortedPosts.length === 0 ? (
-					<p class="empty-state">
-						No blog posts yet. Check back soon!
-					</p>
-				) : (
-					<div class="post-grid">
-						{sortedPosts.map((post) => (
-							<article class="post-card-wrapper">
-								<a
-									href={`${import.meta.env.BASE_URL}blog/${post.id}`}
-									class="post-card"
-								>
-									{post.data.image && (
-										<div class="post-image">
-											<img
-												src={post.data.image}
-												alt={post.data.title}
-											/>
-										</div>
-									)}
+                                <h3 class="text-3xl m-0 mt-4 font-semibold text-[var(--main-color)] line-height-tight">
+                                    {post.data.title}
+                                </h3>
+                                {post.data.description && (
+                                    <p class="text-base text-[var(--gray-color)] m-0 mt-4 leading-relaxed flex-grow">
+                                        {post.data.description}
+                                    </p>
+                                )}
 
-									<h3>{post.data.title}</h3>
-									{post.data.description && (
-										<p class="post-description">
-											{post.data.description}
-										</p>
-									)}
-
-									<div class="post-meta">
-										<time
-											datetime={post.data.date.toISOString()}
-										>
-											{post.data.date.toLocaleDateString(
-												"en-US",
-												{
-													year: "numeric",
-													month: "short",
-													day: "numeric",
-												},
-											)}
-										</time>
-									</div>
-								</a>
-							</article>
-						))}
-					</div>
-				)
-			}
-		</main>
-	</body>
-</html>
+                                <div class="flex justify-between items-center mt-auto mb-0 text-[var(--gray-color)] uppercase tracking-widest text-[0.7rem] font-medium">
+                                    <time
+                                        datetime={post.data.date.toISOString()}
+                                        class="text-[0.8rem]"
+                                    >
+                                        {post.data.date.toLocaleDateString(
+                                            "en-US",
+                                            {
+                                                year: "numeric",
+                                                month: "short",
+                                                day: "numeric",
+                                            },
+                                        )}
+                                    </time>
+                                </div>
+                            </a>
+                        </article>
+                    ))}
+                </div>
+            )
+        }
+    </main>
+</Layout>

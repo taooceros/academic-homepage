@@ -3,6 +3,8 @@ import { defineConfig } from 'astro/config';
 import { typst } from "astro-typst";
 import sitemap from "@astrojs/sitemap";
 
+import tailwindcss from '@tailwindcss/vite';
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://academic-homepage.vercel.app/',
@@ -34,6 +36,8 @@ export default defineConfig({
       minify: 'esbuild',
       sourcemap: false,
     },
+
+    plugins: [tailwindcss()],
   },
   
   // Output configuration

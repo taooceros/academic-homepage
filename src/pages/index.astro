@@ -3,57 +3,38 @@
 import AboutContent from "../../content/about.typ?html&body";
 // @ts-ignore
 import NewsContent from "../../content/news.typ?html&body";
-import Header from "../components/Header.astro";
-import "../styles/main.css";
+import Layout from "../layouts/Layout.astro";
 import SpeedInsights from "@vercel/speed-insights/astro";
 ---
 
-<meta
-	name="google-site-verification"
-	content="J8Yc4-EaEQx6b1dJE5FnXiG7HtDTaVmMnMQJgjgOZto"
-/>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-			rel="stylesheet"
-		/>
-
-		<link
-			rel="icon"
-			type="image/svg+xml"
-			href={`${import.meta.env.BASE_URL}favicon.svg`}
-		/>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="generator" content={Astro.generator} />
-
-		<Header />
-	</head>
-	<body>
-		<main>
-			<section aria-label="About" class="about-section">
-				<div class="about-container">
-					<div class="about-content">
-						<AboutContent />
-					</div>
-					<div class="about-image">
-						<img
-							src={`${import.meta.env.BASE_URL}profile-photo.png`}
-							class="profile-photo"
-							width="400"
-							height="400"
-							loading="eager"
-						/>
-					</div>
+<Layout>
+	<meta
+		slot="head"
+		name="google-site-verification"
+		content="J8Yc4-EaEQx6b1dJE5FnXiG7HtDTaVmMnMQJgjgOZto"
+	/>
+	<main class="max-w-[min(50rem,calc(100%-2em))] mx-auto py-12 px-4">
+		<section aria-label="About" class="mb-12">
+			<div
+				class="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-12 items-start"
+			>
+				<div class="min-w-0 [&_p]:p-1">
+					<AboutContent />
 				</div>
-			</section>
+				<div class="flex justify-center md:order-0 order-first">
+					<img
+						src={`${import.meta.env.BASE_URL}profile-photo.png`}
+						class="w-[150px] h-[180px] object-cover rounded-xl mt-8 shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
+						width="400"
+						height="400"
+						loading="eager"
+					/>
+				</div>
+			</div>
+		</section>
 
-			<section aria-label="Latest News">
-				<NewsContent />
-			</section>
-		</main>
-	</body>
-</html>
+		<section aria-label="Latest News" class="mt-12">
+			<NewsContent />
+		</section>
+	</main>
+</Layout>

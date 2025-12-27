@@ -1,7 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import Header from "../../components/Header.astro";
-import "../../styles/main.css";
+import Layout from "../../layouts/Layout.astro";
 
 export async function getStaticPaths() {
 	const blogPosts = await getCollection("blog");
@@ -39,61 +38,54 @@ export async function getStaticPaths() {
 const { post, Content } = Astro.props;
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link
-			rel="icon"
-			type="image/svg+xml"
-			href={`${import.meta.env.BASE_URL}favicon.svg`}
-		/>
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{post.data.title} - Academic Homepage</title>
-
-		<link
-			rel="stylesheet"
-			href="https://fred-wang.github.io/MathFonts/NewComputerModern/mathfonts.css"
-		/>
-	</head>
-	<body class="blog-post">
-		<Header />
-		<main>
-			<div>
-				<article>
-					<div class="post-header">
-						<h1>{post.data.title}</h1>
-						<div class="post-meta">
-							<div class="date">
-								{
-									post.data.date.toLocaleDateString("en-US", {
-										year: "numeric",
-										month: "long",
-										day: "numeric",
-									})
-								}
-							</div>
-						</div>
-					</div>
-
-					<div class="content">
+<Layout title={`${post.data.title} - Academic Homepage`}>
+	<meta
+		slot="head"
+		name="viewport"
+		content="width=device-width, initial-scale=1.0"
+	/>
+	<link
+		slot="head"
+		rel="stylesheet"
+		href="https://fred-wang.github.io/MathFonts/NewComputerModern/mathfonts.css"
+	/>
+	<main
+		class="max-w-[min(50rem,calc(100%-2em))] mx-auto py-12 px-4 shadow-none"
+	>
+		<article class="bg-transparent">
+			<div class="pb-6">
+				<h1
+					class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-2"
+				>
+					{post.data.title}
+				</h1>
+				<div
+					class="flex gap-4 mt-2 text-sm text-gray-500 font-medium font-italic"
+				>
+					<div class="text-gray-600 text-[0.8rem]">
 						{
-							Content ? (
-								<Content />
-							) : (
-								<p>Content could not be loaded.</p>
-							)
+							post.data.date.toLocaleDateString("en-US", {
+								year: "numeric",
+								month: "long",
+								day: "numeric",
+							})
 						}
 					</div>
-
-					<footer>
-						<a
-							href={`${import.meta.env.BASE_URL}blog`}
-							class="back-link">← Back to Blog</a
-						>
-					</footer>
-				</article>
+				</div>
 			</div>
-		</main>
-	</body>
-</html>
+
+			<div class="prose lg:prose-l">
+				{Content ? <Content /> : <p>Content could not be loaded.</p>}
+			</div>
+
+			<footer class="mt-12 bg-transparent! p-0!">
+				<a
+					href={`${import.meta.env.BASE_URL}blog`}
+					class="inline-flex items-center gap-2 py-3 px-6 bg-slate-50 border border-slate-200 rounded-lg text-gray-600 no-underline font-medium transition-all duration-200 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900 hover:-translate-x-0.5"
+				>
+					← Back to Blog
+				</a>
+			</footer>
+		</article>
+	</main>
+</Layout>
