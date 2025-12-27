@@ -19,7 +19,18 @@ There are a lot of fun learning at UW-Madison. I will sort them based on the sub
 
 = Math
 
-== Math 431/632
+== Linear Algebra (341)
+
+== Probability Theory (431)
+
+== Schocastic Process (632)
+
+== Analysis (521)
+
+== Modern Algebra I (541)
+
+== Modern Algebra II (542)
+
 
 = Computer Science
 
