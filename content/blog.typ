@@ -4,6 +4,7 @@
   title: "Untitled",
   desc: [This is a blog post.],
   date: none,
+  image: none,
   tags: (),
   body,
   author: "Hongtao Zhang",
@@ -16,6 +17,7 @@
         author: author,
         description: desc,
         date: date,
+        image: image,
         tags: tags,
       )) <frontmatter>
     ]

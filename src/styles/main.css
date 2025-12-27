@@ -1010,9 +1010,9 @@ section:not([aria-label="CV"]) table tr:nth-child(2n),
 
 .post-meta {
   display: flex;
-  gap: 1.5rem;
-  margin-top: 1rem;
-  font-size: 0.95rem;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  font-size: 0.7rem;
   color: #6b7280;
   font-weight: 500;
 }
@@ -1054,11 +1054,6 @@ section:not([aria-label="CV"]) table tr:nth-child(2n),
   transform: translateX(-2px);
 }
 
-.post-description {
-  margin: 1rem 0;
-  color: #555;
-  font-size: 1rem;
-}
 
 .post-tags {
   display: flex;
@@ -1334,6 +1329,25 @@ section:not([aria-label="CV"]) table tr:nth-child(2n),
   text-decoration: none;
   color: inherit;
   border: 1px solid rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  /* For rounded corners on image */
+}
+
+.post-card .post-image {
+  margin: -2rem -2rem 0 -2rem;
+  height: 200px;
+  overflow: hidden;
+}
+
+.post-card .post-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.post-card:hover .post-image img {
+  transform: scale(1.05);
 }
 
 .post-card:hover {
@@ -1346,8 +1360,7 @@ section:not([aria-label="CV"]) table tr:nth-child(2n),
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
-  font-size: 0.9rem;
+  margin-bottom: 0;
   color: var(--gray-color);
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -1355,16 +1368,18 @@ section:not([aria-label="CV"]) table tr:nth-child(2n),
 
 .post-card h3 {
   font-size: 1.8rem;
-  margin: 0 0 1rem 0;
-  line-height: 1.3;
-  font-weight: 700;
+  margin: 0;
+  margin-top: 1rem;
+  line-height: 1;
+  font-weight: 600;
   color: var(--main-color);
 }
 
 .post-card .post-description {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: var(--gray-color);
-  margin-bottom: 1.5rem;
+  margin: 0;
+  margin-top: 1rem;
   line-height: 1.6;
   flex-grow: 1;
 }

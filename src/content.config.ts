@@ -4,7 +4,7 @@ import { defineCollection, z } from "astro:content";
 const blog = defineCollection({
   // Load Typst files in the `content/blog/` directory.
   loader: glob({ base: "./content/blog", pattern: "**/*.typ" }),
-  
+
   // Type-check frontmatter using a schema
   schema: z.object({
     title: z.string(),
@@ -13,6 +13,7 @@ const blog = defineCollection({
     date: z.coerce.date(),
     // Transform string to Date object
     updatedDate: z.coerce.date().optional(),
+    image: z.string().optional(),
     tags: z.array(z.string()).optional(),
   }),
 });
