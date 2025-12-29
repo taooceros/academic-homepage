@@ -19,7 +19,7 @@ const isCVPage = currentPath.includes("/cv");
 ---
 
 <header
-  class="sticky top-0 z-[100] m-0 p-0 bg-[rgba(250,248,241,0.8)] dark:bg-[rgba(15,18,25,0.8)] backdrop-blur-xl border-b border-[rgba(109,109,109,0.1)] shadow-sm transition-all duration-300"
+  class="sticky top-0 z-100 m-0 p-0 bg-[rgba(250,248,241,0.8)] dark:bg-[rgba(15,18,25,0.8)] backdrop-blur-xl border-b border-[rgba(109,109,109,0.1)] shadow-sm"
 >
   <nav
     class="flex items-center justify-between max-w-[min(50rem,calc(100%-2em))] mx-auto px-4 h-16"
@@ -28,42 +28,18 @@ const isCVPage = currentPath.includes("/cv");
       <h2 class="m-0 text-xl font-extrabold tracking-tight">
         <a
           href={import.meta.env.BASE_URL}
-          class="flex items-center no-underline text-[var(--main-color)] transition-all duration-300 relative hover:text-[var(--accent)] hover:-translate-y-0.5"
+          class="flex items-center no-underline text-(--main-color) relative"
         >
-          <span class="text-[var(--main-color)] font-medium text-2xl"
+          <span class="text-(--main-color) font-medium text-2xl"
             >Hongtao Zhang</span
           >
         </a>
       </h2>
     </div>
-    <div class="flex items-center gap-2">
-      <a
-        href={import.meta.env.BASE_URL}
-        class={`relative flex items-center p-1 no-underline text-[var(--main-color)] font-light text-[0.95rem] rounded-lg transition-all duration-300 hover:text-[var(--accent)] hover:bg-[var(--accent)]/10 ${isHomePage ? "bg-[var(--accent)]/30 !font-semibold !text-[var(--accent)]" : ""}`}
-      >
-        <span
-          class={`relative z-10 transition-all duration-300 ${isHomePage ? "underline decoration-2 underline-offset-4" : ""}`}
-          >About</span
-        >
-      </a>
-      <a
-        href={`${import.meta.env.BASE_URL}blog`}
-        class={`relative flex items-center p-1 no-underline text-[var(--main-color)] font-light text-[0.95rem] rounded-lg transition-all duration-300 hover:text-[var(--accent)] hover:bg-[var(--accent)]/10 ${isAnyBlogPage ? "bg-[var(--accent)]/30 !font-semibold !text-[var(--accent)]" : ""}`}
-      >
-        <span
-          class={`relative z-10 transition-all duration-300 ${isAnyBlogPage ? "underline decoration-2 underline-offset-4" : ""}`}
-          >Blog</span
-        >
-      </a>
-      <a
-        href={`${import.meta.env.BASE_URL}cv`}
-        class={`relative flex items-center p-1 no-underline text-[var(--main-color)] font-light text-[0.95rem] rounded-lg transition-all duration-300 hover:text-[var(--accent)] hover:bg-[var(--accent)]/10 ${isCVPage ? "bg-[var(--accent)]/30 !font-semibold !text-[var(--accent)]" : ""}`}
-      >
-        <span
-          class={`relative z-10 transition-all duration-300 ${isCVPage ? "underline decoration-2 underline-offset-4" : ""}`}
-          >CV</span
-        >
-      </a>
+    <div class="nav-links">
+      <a href={import.meta.env.BASE_URL}> Home </a>
+      <a href={`${import.meta.env.BASE_URL}blog`}> Blogs </a>
+      <a href={`${import.meta.env.BASE_URL}cv`}> CV </a>
     </div>
   </nav>
 </header>

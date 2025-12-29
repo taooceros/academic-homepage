@@ -2,96 +2,62 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-    --color-main: var(--main-color);
-    --color-accent: var(--accent);
+  --color-main: var(--main-color);
+  --color-accent: var(--accent);
 }
 
 :root {
-    --main-color: rgba(0, 0, 0, 1);
-    --main-hover-color: rgba(34, 41, 57, 1);
-    --raw-bg-color: rgba(67, 95, 119, 0.162);
-    --main-bg-color: #FAF8F1;
-    --nav-bg-color: #FAF8F1;
-    --gray-color: #6d6d6d;
-    --accent: #4a63c7;
-    --black: #0f1219;
-    --paper-card-bg: rgba(0, 0, 0, 0.03);
-    --inlinecodetext: rgba(43, 100, 207, 1.0);
-    --inlinecodeborder: rgba(43, 100, 207, 0.2);
-    --inlinecodebg: rgba(43, 100, 207, 0.05);
-    --codeblocktext: rgba(43, 100, 207, 1.0);
-    --codeblockborder: rgba(85, 131, 217, 0.3);
-    --codeblockbg: rgba(54, 108, 209, 0.01);
+  --main-color: rgba(0, 0, 0, 1);
+  --main-hover-color: rgba(34, 41, 57, 1);
+  --raw-bg-color: rgba(67, 95, 119, 0.162);
+  --main-bg-color: #faf8f1;
+  --nav-bg-color: #faf8f1;
+  --gray-color: #6d6d6d;
+  --accent: #4a63c7;
+  --black: #0f1219;
+  --paper-card-bg: rgba(0, 0, 0, 0.03);
+  --inlinecodetext: rgba(43, 100, 207, 1);
+  --inlinecodeborder: rgba(43, 100, 207, 0.2);
+  --inlinecodebg: rgba(43, 100, 207, 0.05);
+  --codeblocktext: rgba(43, 100, 207, 1);
+  --codeblockborder: rgba(85, 131, 217, 0.3);
+  --codeblockbg: rgba(54, 108, 209, 0.01);
 }
 
 @layer base {
-    body {
-        @apply bg-[#FAF8F1] text-black font-light leading-relaxed m-0 p-0;
-        --vp-font-family-base: "Inter", "Source Sans Pro", "Source Sans Pro Variable", "Noto Sans SC",
-            "PingFang SC", "Microsoft Yahei", ui-sans-serif, system-ui, sans-serif,
-            "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-        font-family: var(--vp-font-family-base);
-    }
+  body {
+    @apply bg-[#FAF8F1] text-black font-light leading-relaxed m-0 p-0;
+    --vp-font-family-base: "Inter", "Source Sans Pro",
+      "Source Sans Pro Variable", "Noto Sans SC", "PingFang SC",
+      "Microsoft Yahei", ui-sans-serif, system-ui, sans-serif,
+      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+      "Noto Color Emoji";
+    font-family: var(--vp-font-family-base);
+  }
 
-    main {
-        @apply max-w-[min(50rem, calc(100%-2em))] mx-auto py-12 px-4;
-    }
-
-    h1 {
-        @apply text-5xl mb-8 font-bold leading-tight;
-    }
-
-    h2 {
-        @apply text-4xl mt-6 mb-4 font-bold leading-relaxed;
-    }
-
-    h3 {
-        @apply text-2xl mt-4 mb-2 font-semibold;
-    }
-
-    h4 {
-        @apply text-xl mt-4 mb-2 font-semibold;
-    }
-
-    h5 {
-        @apply text-lg mt-4 mb-2 font-semibold;
-    }
-
-    h6 {
-        @apply text-base mt-4 mb-2 font-semibold;
-    }
-
-    a {
-        @apply text-[var(--accent)] no-underline transition-colors duration-200 cursor-pointer hover:underline;
-    }
-
-    img {
-        @apply max-w-full h-auto rounded-lg;
-    }
-
-    blockquote {
-        @apply border-l-4 border-[var(--accent)] pl-4 my-2 text-base;
-    }
-
-    pre {
-        @apply p-4 bg-[var(--codeblockbg)] rounded-lg border border-[var(--codeblockborder)] overflow-x-auto font-mono text-sm;
-    }
-
-    code {
-        @apply bg-[var(--inlinecodebg)] text-[var(--inlinecodetext)] px-1 py-0.5 rounded border border-[var(--inlinecodeborder)] text-sm font-mono;
-    }
-
-    pre code {
-        @apply bg-transparent border-none p-0 text-inherit;
-    }
+  main {
+    @apply max-w-[min(50rem,calc(100%-2em))] mx-auto py-12 px-4;
+  }
 }
 
 @layer components {
-    .post-meta {
-        @apply flex gap-4 mt-2 text-xs text-gray-500 font-medium;
-    }
+  .post-meta {
+    @apply flex gap-4 mt-2 text-xs text-gray-500 font-medium;
+  }
 
-    .back-link {
-        @apply inline-flex items-center gap-2 mt-12 py-3 px-6 bg-slate-50 border border-slate-200 rounded-lg text-gray-600 no-underline font-medium transition-all duration-200 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900 hover:-translate-x-0.5;
+  .component-title {
+    @apply text-2xl font-bold mb-8;
+  }
+
+  .back-link {
+    @apply inline-flex items-center gap-2 mt-12 py-3 px-6 bg-slate-50 border border-slate-200 rounded-lg text-gray-600 no-underline font-medium transition-all duration-200;
+  }
+
+  .nav-links {
+    @apply flex items-center gap-2;
+
+    a {
+      @apply relative flex items-center p-1 no-underline text-(--main-color) font-light text-[0.95rem] rounded-lg transition-all duration-300;
     }
+  }
 }
