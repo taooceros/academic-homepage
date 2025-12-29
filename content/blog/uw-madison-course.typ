@@ -43,7 +43,7 @@ It is a fortune for me to have a chance to take the course with Erik. I wasn't p
 
 Erik is a very nice and interesting guy. He looks very young. At the first time I went to class, I thought I went to the wrong classroom, because the one who stands in front of the blackboard looks like a TA (especially with the red UW-Madison mask). He talks very fast at first, but the lecture is very engaging and I never imagine 50 minutes courses feel so short. He also asks us to write a feedback every two weeks, and read everyone's feedback (even write comments on it) and literally follow some of the feedback to improve the course. For example, he significantly reduces the speed he talks.
 
-One of the most insightful thing I learnt is what Erik is saying at the first lecture. He throws a die to the ground and told us there is no such things as random. Physics determines what the results of the die will be.
+One of the most insightful thing I learnt is what Erik is saying at the first lecture. He throws a die to the ground and told us there is no such things as random. Physics determines what the results of the die will be. If we tracks every motion of the die, then we can know the result of the die.  However, why do people still say it is "random"? It is because it is very hard to track every motion of the die, but still want to have a sense about what the die will be. Probability is a theory on top of uncertainty.
 
 == Schocastic Process (632) <stochastic-process>
 
