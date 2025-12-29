@@ -45,6 +45,8 @@ Erik is a very nice and interesting guy. He looks very young. At the first time 
 
 One of the most insightful thing I learnt is what Erik is saying at the first lecture. He throws a die to the ground and told us there is no such things as random. Physics determines what the results of the die will be. If we tracks every motion of the die, then we can know the result of the die.  However, why do people still say it is "random"? It is because it is very hard to track every motion of the die, but still want to have a sense about what the die will be. Probability is a theory on top of uncertainty.
 
+One thing Erik is strving us to do is to do sanity check. He wants us to have a "sense" about whether a result is making sense and being intuitive. I think this is something everyone should do when learning math, but nobody has emphasized it before Erik. Another outstanding thing that Erik is doing is that he always motivates us about a theory before introducing complicate concepts. One very interesting example is that he first gives a very complex "proof" of the Central Limit Theorem about Sum of binary random variables, and then introduces the generating function and moment generating function to provide a simpler but more general proof.
+
 == Schocastic Process (632) <stochastic-process>
 
 == Analysis (521)
