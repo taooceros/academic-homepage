@@ -24,6 +24,5 @@
     "@babel/parser": "^7.28.5",
     "@tailwindcss/typography": "^0.5.19",
     "vite": "7.1.12"
-  },
-  "packageManager": "yarn@4.10.3"
+  }
 }
