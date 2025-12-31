@@ -6,7 +6,7 @@
   title: "UW-Madison Course",
   desc: "My retrospective of UW-Madison courses.",
   date: "2025-06-08",
-  image: "img.png",
+  image: "/img.png",
   tags: (
     "undergrad",
     "course",
