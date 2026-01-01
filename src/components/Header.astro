@@ -7,39 +7,39 @@ const baseUrl = import.meta.env.BASE_URL;
 
 // Helper function to normalize paths by removing trailing slashes
 const normalizePath = (path: string) =>
-  path.endsWith("/") && path.length > 1 ? path.slice(0, -1) : path;
+    path.endsWith("/") && path.length > 1 ? path.slice(0, -1) : path;
 
 const normalizedCurrentPath = normalizePath(currentPath);
 const normalizedBaseUrl = normalizePath(baseUrl);
 
 const isHomePage =
-  normalizedCurrentPath === normalizedBaseUrl || normalizedCurrentPath === "";
+    normalizedCurrentPath === normalizedBaseUrl || normalizedCurrentPath === "";
 const isAnyBlogPage = currentPath.includes("/blog");
 const isCVPage = currentPath.includes("/cv");
 ---
 
 <header
-  class="sticky top-0 z-100 m-0 p-0 bg-[rgba(250,248,241,0.8)] dark:bg-[rgba(15,18,25,0.8)] backdrop-blur-xl border-b border-[rgba(109,109,109,0.1)] shadow-sm"
+    class="sticky top-0 z-100 m-0 p-0 bg-[rgba(250,248,241,0.8)] backdrop-blur-xl border-b border-[rgba(109,109,109,0.1)] shadow-sm"
 >
-  <nav
-    class="flex items-center justify-between max-w-[min(50rem,calc(100%-2em))] mx-auto px-4 h-16"
-  >
-    <div class="flex items-center">
-      <h2 class="m-0 text-xl font-extrabold tracking-tight">
-        <a
-          href={import.meta.env.BASE_URL}
-          class="flex items-center no-underline text-(--main-color) relative"
-        >
-          <span class="text-(--main-color) font-medium text-2xl"
-            >Hongtao Zhang</span
-          >
-        </a>
-      </h2>
-    </div>
-    <div class="nav-links">
-      <a href={import.meta.env.BASE_URL}> Home </a>
-      <a href={`${import.meta.env.BASE_URL}blog`}> Blogs </a>
-      <a href={`${import.meta.env.BASE_URL}cv`}> CV </a>
-    </div>
-  </nav>
+    <nav
+        class="flex items-center justify-between max-w-[min(50rem,calc(100%-2em))] mx-auto px-4 h-16"
+    >
+        <div class="flex items-center">
+            <h2 class="m-0 text-xl font-extrabold tracking-tight">
+                <a
+                    href={import.meta.env.BASE_URL}
+                    class="flex items-center no-underline text-(--main-color) relative"
+                >
+                    <span class="text-(--main-color) font-medium text-2xl"
+                        >Hongtao Zhang</span
+                    >
+                </a>
+            </h2>
+        </div>
+        <div class="nav-links">
+            <a href={import.meta.env.BASE_URL}> Home </a>
+            <a href={`${import.meta.env.BASE_URL}blog`}> Blogs </a>
+            <a href={`${import.meta.env.BASE_URL}cv`}> CV </a>
+        </div>
+    </nav>
 </header>
