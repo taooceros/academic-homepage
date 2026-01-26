@@ -2,9 +2,9 @@
 
 == Research Interests
 
-- High Performance Interconnect
-- Abstraction over Emerging Heterogeneous Hardware
-- IO-Virtualization for Offloadable Container Runtime
+- Programming Language
+- Scalable Synchronization
+- Concurrency Theory
 
 == Education
 
