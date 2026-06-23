@@ -68,12 +68,27 @@ One thing Erik's version of probability theory that is different from the textbo
 
 Then he introduces the concept of _Moment Generating Function_ and shows how it can be used to prove CLT in a much simpler way. This is a very good example of how to motivate a concept with a real application.
 
-#figure(caption: "Moment Generating Function")[
+#figure(caption: "Proof of CLT using Moment Generating Function")[
   #image("uw-madison-course/431-4.png")
 ]
 
 
 == Schocastic Process (632: Erik Bates) <stochastic-process>
+
+I have the luck to take the stochastic process course with Erik again. It is a really funny course; Strictly speaking, it is much harder compared to @probability-theory, but is still very interesting. Compared to 431 where I don't need much help to finish the homework, I often can't do the homework easily without Erik's help.
+
+One good thing of taking Erik's course is that you get 2 $times$ 2 hours of office hours every week, which is estremely rare for a research professor. It is a very funny enviroment in the office hours, as there are a lot of students and they are all working on different problems. Erik is ease to talk about random stuff, so he always fulfill my curiosity about math and life.
+
+The course contains a few major components:
++ Markov Chain
++ Poisson Process
++ Martingale
++ Probability Generating Function
++ Branching Process (a little bit)
+
+What's interesting about this course is a lot of time we are analyzing a gambling strategy; one interesting example is the following game:
+
+
 
 
 == Analysis (521: Jordan Ellenberg)

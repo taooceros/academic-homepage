@@ -3,6 +3,8 @@ dist/
 # generated types
 .astro/
 
+# local git-crypt symmetric key
+.git-crypt-key*
 # dependencies
 node_modules/
 
