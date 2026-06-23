@@ -1,0 +1,68 @@
+#!/bin/sh
+set -eu
+
+usage() {
+  cat <<'EOF'
+usage:
+  d              create/open today's diary in Zed
+  d open [DATE]  create/open DATE's diary in Zed
+  d new [DATE]   create DATE's diary if missing, print path
+  d path [DATE]  print DATE's diary path
+
+DATE defaults to today and must be YYYY-MM-DD.
+EOF
+}
+
+repo_root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+diary_dir=${DIARY_DIR:-$repo_root/content/diary}
+
+cmd=${1:-open}
+case "$cmd" in
+  -h|--help|help)
+    usage
+    exit 0
+    ;;
+  open|new|path)
+    shift || true
+    ;;
+  *)
+    # Treat a bare date as "open DATE".
+    if printf '%s\n' "$cmd" | grep -Eq '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'; then
+      set -- "$cmd" "$@"
+      cmd=open
+    else
+      printf 'unknown diary command: %s\n\n' "$cmd" >&2
+      usage >&2
+      exit 64
+    fi
+    ;;
+esac
+
+date_arg=${1:-$(date +%F)}
+if ! printf '%s\n' "$date_arg" | grep -Eq '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'; then
+  printf 'diary date must be YYYY-MM-DD: %s\n' "$date_arg" >&2
+  exit 64
+fi
+
+file=$diary_dir/$date_arg.typ
+
+case "$cmd" in
+  path)
+    printf '%s\n' "$file"
+    exit 0
+    ;;
+esac
+
+mkdir -p "$diary_dir"
+if [ ! -e "$file" ]; then
+  printf '= %s\n\n' "$date_arg" > "$file"
+fi
+
+case "$cmd" in
+  new)
+    printf '%s\n' "$file"
+    ;;
+  open)
+    exec zed "$file"
+    ;;
+esac
