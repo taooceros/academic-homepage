@@ -15,7 +15,7 @@ type ClientDiarySource = {
 };
 
 const diaryDir = new URL("../../content/diary/", import.meta.url);
-const gitCryptHeader = new Uint8Array([0, 71, 73, 84, 67, 82, 89, 80, 84, 0]);
+const gitCryptHeader = Buffer.from([0, 71, 73, 84, 67, 82, 89, 80, 84, 0]);
 
 const entries = readdirSync(diaryDir)
   .filter((fileName) => fileName.endsWith(".typ"))
@@ -26,7 +26,9 @@ const entries = readdirSync(diaryDir)
     }
 
     const bytes = readFileSync(new URL(fileName, diaryDir));
-    const isEncrypted = gitCryptHeader.every((byte, index) => bytes[index] === byte);
+    const isEncrypted =
+      bytes.length >= gitCryptHeader.length &&
+      bytes.subarray(0, gitCryptHeader.length).equals(gitCryptHeader);
 
     return {
       date: new Date(`${dateKey}T00:00:00`),
@@ -50,6 +52,11 @@ const clientEntries: ClientDiarySource[] = entries.map(({ dateKey, source }) => 
 }));
 
 const clientEntriesJson = JSON.stringify(clientEntries).replace(/</g, "\\u003c");
+const visibleEntryCount = 5;
+const initialVisibleDateKeys = new Set(
+  entries.slice(0, visibleEntryCount).map((entry) => entry.dateKey),
+);
+
 ---
 
 <Layout
@@ -120,10 +127,13 @@ const clientEntriesJson = JSON.stringify(clientEntries).replace(/</g, "\\u003c")
           </aside>
 
           <div class="space-y-8">
-            {entries.map((entry) => (
+            {entries.map((entry, index) => (
               <article
                 id={entry.dateKey}
                 class="diary-card scroll-mt-24 rounded-3xl border border-black/10 bg-white/45 p-3 shadow-[0_18px_60px_rgba(15,18,25,0.08)] backdrop-blur-sm md:p-4"
+                data-diary-card={entry.dateKey}
+                data-diary-index={index}
+                hidden={!initialVisibleDateKeys.has(entry.dateKey)}
               >
                 <div
                   class="typst-diary-svg overflow-hidden rounded-2xl bg-[#fffdf7]"
@@ -209,6 +219,9 @@ const clientEntriesJson = JSON.stringify(clientEntries).replace(/</g, "\\u003c")
   const status = document.getElementById("diary-key-status");
   const compiler = createTypstCompiler();
   const renderer = createTypstRenderer();
+  const visibleEntryCount = 5;
+  const visibleIndexWindow = new Set<number>();
+  let unlockedKey: string | null = null;
   let initPromise: Promise<unknown> | null = null;
 
   const initTypst = () => {
@@ -237,6 +250,21 @@ const clientEntriesJson = JSON.stringify(clientEntries).replace(/</g, "\\u003c")
 
   const decryptSource = (source: string, key: string) =>
     decryptGitCryptSource(source, key);
+
+  const visibleRangeForIndex = (selectedIndex: number) => {
+    const firstIndex = Math.min(
+      Math.max(selectedIndex - 2, 0),
+      Math.max(entries.length - visibleEntryCount, 0),
+    );
+    const lastIndex = Math.min(firstIndex + visibleEntryCount, entries.length);
+    return { firstIndex, lastIndex };
+  };
+
+  const selectedIndexFromHash = () => {
+    const dateKey = decodeURIComponent(location.hash.slice(1));
+    const index = entries.findIndex((entry) => entry.dateKey === dateKey);
+    return index === -1 ? 0 : index;
+  };
 
   const renderEntry = async (entry: ClientDiarySource, key: string) => {
     const container = document.querySelector<HTMLElement>(
@@ -270,7 +298,35 @@ const clientEntriesJson = JSON.stringify(clientEntries).replace(/</g, "\\u003c")
     });
 
     container.removeAttribute("aria-busy");
+    container.dataset.renderedWithKey = key;
     container.innerHTML = svg;
+  };
+
+  const showSelectedEntryWindow = async () => {
+    const { firstIndex, lastIndex } = visibleRangeForIndex(selectedIndexFromHash());
+    visibleIndexWindow.clear();
+    for (let index = firstIndex; index < lastIndex; index += 1) {
+      visibleIndexWindow.add(index);
+    }
+
+    document.querySelectorAll<HTMLElement>("[data-diary-card]").forEach((card) => {
+      const index = Number(card.dataset.diaryIndex);
+      card.hidden = !visibleIndexWindow.has(index);
+    });
+
+    if (!unlockedKey) {
+      return;
+    }
+
+    for (const index of visibleIndexWindow) {
+      const entry = entries[index];
+      const container = document.querySelector<HTMLElement>(
+        `[data-diary-entry="${entry.dateKey}"]`,
+      );
+      if (container?.dataset.renderedWithKey !== unlockedKey) {
+        await renderEntry(entry, unlockedKey);
+      }
+    }
   };
 
   form?.addEventListener("submit", async (event) => {
@@ -286,10 +342,14 @@ const clientEntriesJson = JSON.stringify(clientEntries).replace(/</g, "\\u003c")
     setStatus("Loading compiler…");
     await initTypst();
 
+    unlockedKey = key;
     setStatus("Rendering…");
-    for (const entry of entries) {
-      await renderEntry(entry, key);
-    }
+    await showSelectedEntryWindow();
     setStatus("Unlocked");
+  });
+
+  void showSelectedEntryWindow();
+  window.addEventListener("hashchange", () => {
+    void showSelectedEntryWindow();
   });
 </script>
