@@ -8,6 +8,7 @@
         "@astrojs/sitemap": "^3.6.0",
         "@myriaddreamin/typst-ts-node-compiler": "0.8.0-rc1",
         "@myriaddreamin/typst-ts-renderer": "0.8.0-rc1",
+        "@myriaddreamin/typst-ts-web-compiler": "0.8.0-rc1",
         "@myriaddreamin/typst.ts": "0.8.0-rc1",
         "@tailwindcss/vite": "^4.1.18",
         "@vercel/speed-insights": "^1.2.0",
@@ -185,6 +186,8 @@
     "@myriaddreamin/typst-ts-node-compiler-win32-x64-msvc": ["@myriaddreamin/typst-ts-node-compiler-win32-x64-msvc@0.8.0-rc1", "", { "os": "win32", "cpu": "x64" }, "sha512-D8V0yHWLayirYWLM4YZa85nxtuYMDdU9f7v5bpYMfMi3z2uAx2a6s6HzUxgKDugddGDbdAiWTdlyfFJQSgocOQ=="],
 
     "@myriaddreamin/typst-ts-renderer": ["@myriaddreamin/typst-ts-renderer@0.8.0-rc1", "", {}, "sha512-SEU4JTozt3paUnuJolTkWQk9s/dO1hkaNHXGsfMONcV9VY+Dyt/ypESvaPezAwhKsH0FvPpdOmw2djKlVW/Osw=="],
+
+    "@myriaddreamin/typst-ts-web-compiler": ["@myriaddreamin/typst-ts-web-compiler@0.8.0-rc1", "", {}, "sha512-Uf62Uh1Oo0r/9XnIt87SaSTe7lWho2Eyse6/d6QGz0SUzDd5DJRedVriz+yY8dBPK8QzCcxMLDsZgo7z9ACqAg=="],
 
     "@myriaddreamin/typst.ts": ["@myriaddreamin/typst.ts@0.8.0-rc1", "", { "dependencies": { "idb": "^7.1.1" }, "peerDependencies": { "@myriaddreamin/typst-ts-renderer": "^0.8.0-rc1", "@myriaddreamin/typst-ts-web-compiler": "^0.8.0-rc1" }, "optionalPeers": ["@myriaddreamin/typst-ts-renderer", "@myriaddreamin/typst-ts-web-compiler"] }, "sha512-preiApbD/bwtksehJ7kqUuM9QZfKKQYcv/3dX5gTZiaQgvzfZ7kZXg0PJIM7dJIbnk6NW4bZo83+s3+m+XP5SQ=="],
 
