@@ -1,0 +1,295 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { readdirSync, readFileSync } from "node:fs";
+import { Buffer } from "node:buffer";
+
+type DiarySource = {
+  date: Date;
+  dateKey: string;
+  source: string;
+};
+
+type ClientDiarySource = {
+  dateKey: string;
+  source: string;
+};
+
+const diaryDir = new URL("../../content/diary/", import.meta.url);
+const gitCryptHeader = new Uint8Array([0, 71, 73, 84, 67, 82, 89, 80, 84, 0]);
+
+const entries = readdirSync(diaryDir)
+  .filter((fileName) => fileName.endsWith(".typ"))
+  .map((fileName): DiarySource | null => {
+    const dateKey = fileName.match(/^(\d{4}-\d{2}-\d{2})\.typ$/)?.[1];
+    if (!dateKey) {
+      return null;
+    }
+
+    const bytes = readFileSync(new URL(fileName, diaryDir));
+    const isEncrypted = gitCryptHeader.every((byte, index) => bytes[index] === byte);
+
+    return {
+      date: new Date(`${dateKey}T00:00:00`),
+      dateKey,
+      source: isEncrypted ?
+        `git-crypt:v1:${Buffer.from(bytes).toString("base64")}` :
+        new TextDecoder("utf-8", { fatal: true }).decode(bytes),
+    };
+  })
+  .filter((entry): entry is DiarySource => entry !== null)
+  .sort((a, b) => b.date.getTime() - a.date.getTime());
+
+const shortDateFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+});
+
+const clientEntries: ClientDiarySource[] = entries.map(({ dateKey, source }) => ({
+  dateKey,
+  source,
+}));
+
+const clientEntriesJson = JSON.stringify(clientEntries).replace(/</g, "\\u003c");
+---
+
+<Layout
+  title="Diary - Hongtao Zhang"
+  description="Diary entries by Hongtao Zhang"
+>
+  <main>
+    <section class="mb-12">
+      <p class="text-sm uppercase tracking-[0.25em] text-(--gray-color) mb-3">
+        Journal
+      </p>
+      <h1 class="component-title mb-4">Diary</h1>
+    </section>
+
+    <form
+      id="diary-key-form"
+      class="mb-10 rounded-2xl border border-black/10 bg-white/45 p-4 shadow-sm md:flex md:items-end md:gap-3"
+    >
+      <label class="block grow">
+        <span class="mb-2 block text-sm font-medium text-(--gray-color)">
+          Decipher key
+        </span>
+        <input
+          id="diary-key"
+          name="key"
+          type="password"
+          autocomplete="current-password"
+          class="w-full rounded-xl border border-black/10 bg-[#fffdf7] px-4 py-3 text-base outline-none transition-colors focus:border-black/30"
+          placeholder="Enter key to render diary"
+          required
+        />
+      </label>
+      <button
+        type="submit"
+        class="mt-3 rounded-xl bg-(--main-color) px-5 py-3 text-sm font-medium text-white transition-opacity hover:opacity-85 md:mt-0"
+      >
+        Unlock
+      </button>
+      <p
+        id="diary-key-status"
+        class="mt-3 text-sm text-(--gray-color) md:mt-0 md:min-w-36"
+        aria-live="polite"
+      >
+        Locked
+      </p>
+    </form>
+
+    {
+      entries.length === 0 ?
+        <p class="text-center text-(--gray-color) text-lg">
+          No diary entries yet.
+        </p>
+      : <div class="grid grid-cols-1 lg:grid-cols-[11rem_minmax(0,1fr)] gap-8 lg:gap-12">
+          <aside class="lg:sticky lg:top-24 lg:self-start">
+            <h2 class="text-sm font-semibold uppercase tracking-[0.2em] text-(--gray-color) mb-4">
+              Entries
+            </h2>
+            <nav class="flex lg:flex-col gap-2 overflow-x-auto pb-2 lg:pb-0">
+              {entries.map((entry) => (
+                <a
+                  href={`#${entry.dateKey}`}
+                  class="shrink-0 no-underline text-sm text-(--gray-color) hover:text-(--main-color) rounded-lg px-3 py-2 bg-(--paper-card-bg) hover:bg-black/10 transition-colors"
+                >
+                  {shortDateFormatter.format(entry.date)}
+                </a>
+              ))}
+            </nav>
+          </aside>
+
+          <div class="space-y-8">
+            {entries.map((entry) => (
+              <article
+                id={entry.dateKey}
+                class="diary-card scroll-mt-24 rounded-3xl border border-black/10 bg-white/45 p-3 shadow-[0_18px_60px_rgba(15,18,25,0.08)] backdrop-blur-sm md:p-4"
+              >
+                <div
+                  class="typst-diary-svg overflow-hidden rounded-2xl bg-[#fffdf7]"
+                  data-diary-entry={entry.dateKey}
+                  aria-busy="true"
+                >
+                  <p class="m-0 text-(--gray-color)">Enter the decipher key to render this entry.</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+    }
+  </main>
+
+  <script
+    id="diary-entries"
+    type="application/json"
+    set:html={clientEntriesJson}
+  />
+</Layout>
+
+<style>
+  .diary-card {
+    transition:
+      transform 180ms ease,
+      box-shadow 180ms ease,
+      border-color 180ms ease;
+  }
+
+  .diary-card:hover {
+    transform: translateY(-1px);
+    border-color: rgba(0, 0, 0, 0.14);
+    box-shadow: 0 22px 70px rgba(15, 18, 25, 0.11);
+  }
+
+  .typst-diary-svg {
+    min-height: 18rem;
+  }
+
+  .typst-diary-svg :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>
+
+<script>
+  import { decryptGitCryptSource } from "../lib/gitCrypt";
+  import { createTypstCompiler } from "@myriaddreamin/typst.ts/compiler";
+  import { createTypstRenderer } from "@myriaddreamin/typst.ts/renderer";
+  import { preloadFontAssets } from "@myriaddreamin/typst.ts/options.init";
+  import compilerWasmUrl from "@myriaddreamin/typst-ts-web-compiler/wasm?url";
+  import rendererWasmUrl from "@myriaddreamin/typst-ts-renderer/wasm?url";
+
+  type ClientDiarySource = {
+    dateKey: string;
+    source: string;
+  };
+
+  const diaryTypstPrelude = `#set page(
+  width: 430pt,
+  height: auto,
+  margin: (x: 34pt, y: 38pt),
+)
+#set text(
+  font: ("Libertinus Serif", "Noto Serif CJK SC"),
+  size: 10.5pt,
+)
+#set par(
+  leading: 0.72em,
+  justify: true,
+)
+`;
+
+  const entriesElement = document.getElementById("diary-entries");
+  const entries = entriesElement?.textContent ?
+    JSON.parse(entriesElement.textContent) as ClientDiarySource[] :
+    [];
+
+  const form = document.getElementById("diary-key-form") as HTMLFormElement | null;
+  const keyInput = document.getElementById("diary-key") as HTMLInputElement | null;
+  const status = document.getElementById("diary-key-status");
+  const compiler = createTypstCompiler();
+  const renderer = createTypstRenderer();
+  let initPromise: Promise<unknown> | null = null;
+
+  const initTypst = () => {
+    initPromise ??= Promise.all([
+      compiler.init({
+        beforeBuild: [
+          preloadFontAssets({
+            assets: ["text", "cjk"],
+          }),
+        ],
+        getModule: () => compilerWasmUrl,
+      }),
+      renderer.init({
+        getModule: () => rendererWasmUrl,
+      }),
+    ]);
+
+    return initPromise;
+  };
+
+  const setStatus = (message: string) => {
+    if (status) {
+      status.textContent = message;
+    }
+  };
+
+  const decryptSource = (source: string, key: string) =>
+    decryptGitCryptSource(source, key);
+
+  const renderEntry = async (entry: ClientDiarySource, key: string) => {
+    const container = document.querySelector<HTMLElement>(
+      `[data-diary-entry="${entry.dateKey}"]`,
+    );
+    if (!container) {
+      return;
+    }
+
+    container.setAttribute("aria-busy", "true");
+    container.innerHTML = `<p class="m-0 text-(--gray-color)">Rendering diary entry…</p>`;
+
+    const source = await decryptSource(entry.source, key);
+    const mainFilePath = `/diary/${entry.dateKey}.typ`;
+    compiler.addSource(mainFilePath, `${diaryTypstPrelude}\n${source}`);
+
+    const { result: vectorData, diagnostics } = await compiler.compile({
+      mainFilePath,
+      diagnostics: "unix",
+    });
+
+    if (!vectorData) {
+      container.removeAttribute("aria-busy");
+      container.innerText = diagnostics?.join("\n") || "Typst compile failed.";
+      return;
+    }
+
+    const svg = await renderer.renderSvg({
+      format: "vector",
+      artifactContent: vectorData,
+    });
+
+    container.removeAttribute("aria-busy");
+    container.innerHTML = svg;
+  };
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const key = keyInput?.value ?? "";
+    if (!key) {
+      setStatus("Key required");
+      keyInput?.focus();
+      return;
+    }
+
+    setStatus("Loading compiler…");
+    await initTypst();
+
+    setStatus("Rendering…");
+    for (const entry of entries) {
+      await renderEntry(entry, key);
+    }
+    setStatus("Unlocked");
+  });
+</script>
