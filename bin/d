@@ -8,6 +8,8 @@ usage:
   d open [DATE]  create/open DATE's diary in Zed
   d new [DATE]   create DATE's diary if missing, print path
   d path [DATE]  print DATE's diary path
+  d s            add diary, commit with current date, push
+  d sync         add diary, commit with current date, push
 
 DATE defaults to today and must be YYYY-MM-DD.
 EOF
@@ -22,7 +24,7 @@ case "$cmd" in
     usage
     exit 0
     ;;
-  open|new|path)
+  open|new|path|sync|s)
     shift || true
     ;;
   *)
@@ -37,6 +39,43 @@ case "$cmd" in
     fi
     ;;
 esac
+
+if [ "$cmd" = sync ] || [ "$cmd" = s ]; then
+  mkdir -p "$diary_dir"
+
+  case "$diary_dir" in
+    "$repo_root"/*) diary_path=${diary_dir#"$repo_root"/} ;;
+    "$repo_root") diary_path=. ;;
+    *) diary_path=$diary_dir ;;
+  esac
+
+  git -C "$repo_root" add "$diary_path"
+
+  modified_dates=
+  for path in $(git -C "$repo_root" diff --cached --name-only -- "$diary_path"); do
+    name=${path##*/}
+    modified_date=${name%.typ}
+    if [ "$name" != "$modified_date" ] &&
+      printf '%s\n' "$modified_date" | grep -Eq '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'; then
+      if [ -z "$modified_dates" ]; then
+        modified_dates=$modified_date
+      else
+        modified_dates="$modified_dates, $modified_date"
+      fi
+    fi
+  done
+
+  if ! git -C "$repo_root" diff --cached --quiet -- "$diary_path"; then
+    commit_msg="diary: $(date +%F)"
+    if [ -n "$modified_dates" ]; then
+      commit_msg="$commit_msg ($modified_dates)"
+    fi
+    git -C "$repo_root" commit -m "$commit_msg" -- "$diary_path"
+  fi
+
+  git -C "$repo_root" push
+  exit 0
+fi
 
 date_arg=${1:-$(date +%F)}
 if ! printf '%s\n' "$date_arg" | grep -Eq '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'; then

@@ -4,197 +4,212 @@ import { readdirSync, readFileSync } from "node:fs";
 import { Buffer } from "node:buffer";
 
 type DiarySource = {
-  date: Date;
-  dateKey: string;
-  source: string;
+    date: Date;
+    dateKey: string;
+    source: string;
 };
 
 type ClientDiarySource = {
-  dateKey: string;
-  source: string;
+    dateKey: string;
+    source: string;
 };
 
 const diaryDir = new URL("../../content/diary/", import.meta.url);
 const gitCryptHeader = Buffer.from([0, 71, 73, 84, 67, 82, 89, 80, 84, 0]);
 
 const entries = readdirSync(diaryDir)
-  .filter((fileName) => fileName.endsWith(".typ"))
-  .map((fileName): DiarySource | null => {
-    const dateKey = fileName.match(/^(\d{4}-\d{2}-\d{2})\.typ$/)?.[1];
-    if (!dateKey) {
-      return null;
-    }
+    .filter((fileName) => fileName.endsWith(".typ"))
+    .map((fileName): DiarySource | null => {
+        const dateKey = fileName.match(/^(\d{4}-\d{2}-\d{2})\.typ$/)?.[1];
+        if (!dateKey) {
+            return null;
+        }
 
-    const bytes = readFileSync(new URL(fileName, diaryDir));
-    const isEncrypted =
-      bytes.length >= gitCryptHeader.length &&
-      bytes.subarray(0, gitCryptHeader.length).equals(gitCryptHeader);
+        const bytes = readFileSync(new URL(fileName, diaryDir));
+        const isEncrypted =
+            bytes.length >= gitCryptHeader.length &&
+            bytes.subarray(0, gitCryptHeader.length).equals(gitCryptHeader);
 
-    return {
-      date: new Date(`${dateKey}T00:00:00`),
-      dateKey,
-      source: isEncrypted ?
-        `git-crypt:v1:${Buffer.from(bytes).toString("base64")}` :
-        new TextDecoder("utf-8", { fatal: true }).decode(bytes),
-    };
-  })
-  .filter((entry): entry is DiarySource => entry !== null)
-  .sort((a, b) => b.date.getTime() - a.date.getTime());
+        return {
+            date: new Date(`${dateKey}T00:00:00`),
+            dateKey,
+            source: isEncrypted
+                ? `git-crypt:v1:${Buffer.from(bytes).toString("base64")}`
+                : new TextDecoder("utf-8", { fatal: true }).decode(bytes),
+        };
+    })
+    .filter((entry): entry is DiarySource => entry !== null)
+    .sort((a, b) => b.date.getTime() - a.date.getTime());
 
 const shortDateFormatter = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  day: "numeric",
+    month: "short",
+    day: "numeric",
 });
 
-const clientEntries: ClientDiarySource[] = entries.map(({ dateKey, source }) => ({
-  dateKey,
-  source,
-}));
-
-const clientEntriesJson = JSON.stringify(clientEntries).replace(/</g, "\\u003c");
-const visibleEntryCount = 5;
-const initialVisibleDateKeys = new Set(
-  entries.slice(0, visibleEntryCount).map((entry) => entry.dateKey),
+const clientEntries: ClientDiarySource[] = entries.map(
+    ({ dateKey, source }) => ({
+        dateKey,
+        source,
+    }),
 );
 
+const clientEntriesJson = JSON.stringify(clientEntries).replace(
+    /</g,
+    "\\u003c",
+);
+const visibleEntryCount = 5;
+const initialVisibleDateKeys = new Set(
+    entries.slice(0, visibleEntryCount).map((entry) => entry.dateKey),
+);
 ---
 
 <Layout
-  title="Diary - Hongtao Zhang"
-  description="Diary entries by Hongtao Zhang"
+    title="Diary - Hongtao Zhang"
+    description="Diary entries by Hongtao Zhang"
 >
-  <main>
-    <section class="mb-12">
-      <p class="text-sm uppercase tracking-[0.25em] text-(--gray-color) mb-3">
-        Journal
-      </p>
-      <h1 class="component-title mb-4">Diary</h1>
-    </section>
+    <main>
+        <section class="mb-12">
+            <p
+                class="text-sm uppercase tracking-[0.25em] text-(--gray-color) mb-3"
+            >
+                Journal
+            </p>
+            <h1 class="component-title mb-4">Diary</h1>
+        </section>
 
-    <form
-      id="diary-key-form"
-      class="mb-10 rounded-2xl border border-black/10 bg-white/45 p-4 shadow-sm md:flex md:items-end md:gap-3"
-    >
-      <label class="block grow">
-        <span class="mb-2 block text-sm font-medium text-(--gray-color)">
-          Decipher key
-        </span>
-        <input
-          id="diary-key"
-          name="key"
-          type="password"
-          autocomplete="current-password"
-          class="w-full rounded-xl border border-black/10 bg-[#fffdf7] px-4 py-3 text-base outline-none transition-colors focus:border-black/30"
-          placeholder="Enter key to render diary"
-          required
-        />
-      </label>
-      <button
-        type="submit"
-        class="mt-3 rounded-xl bg-(--main-color) px-5 py-3 text-sm font-medium text-white transition-opacity hover:opacity-85 md:mt-0"
-      >
-        Unlock
-      </button>
-      <p
-        id="diary-key-status"
-        class="mt-3 text-sm text-(--gray-color) md:mt-0 md:min-w-36"
-        aria-live="polite"
-      >
-        Locked
-      </p>
-    </form>
-
-    {
-      entries.length === 0 ?
-        <p class="text-center text-(--gray-color) text-lg">
-          No diary entries yet.
-        </p>
-      : <div class="grid grid-cols-1 lg:grid-cols-[11rem_minmax(0,1fr)] gap-8 lg:gap-12">
-          <aside class="lg:sticky lg:top-24 lg:self-start">
-            <h2 class="text-sm font-semibold uppercase tracking-[0.2em] text-(--gray-color) mb-4">
-              Entries
-            </h2>
-            <nav class="flex lg:flex-col gap-2 overflow-x-auto pb-2 lg:pb-0">
-              {entries.map((entry) => (
-                <a
-                  href={`#${entry.dateKey}`}
-                  class="shrink-0 no-underline text-sm text-(--gray-color) hover:text-(--main-color) rounded-lg px-3 py-2 bg-(--paper-card-bg) hover:bg-black/10 transition-colors"
+        <form
+            id="diary-key-form"
+            class="mb-10 rounded-2xl border border-black/10 bg-white/45 p-4 shadow-sm md:flex md:items-end md:gap-3"
+        >
+            <label class="block grow">
+                <span
+                    class="mb-2 block text-sm font-medium text-(--gray-color)"
                 >
-                  {shortDateFormatter.format(entry.date)}
-                </a>
-              ))}
-            </nav>
-          </aside>
+                    Decipher key
+                </span>
+                <input
+                    id="diary-key"
+                    name="key"
+                    type="password"
+                    autocomplete="current-password"
+                    class="w-full rounded-xl border border-black/10 bg-[#fffdf7] px-4 py-3 text-base outline-none transition-colors focus:border-black/30"
+                    placeholder="Enter key to render diary"
+                    required
+                />
+            </label>
+            <button
+                type="submit"
+                class="mt-3 rounded-xl bg-(--main-color) px-5 py-3 text-sm font-medium text-white transition-opacity hover:opacity-85 md:mt-0"
+            >
+                Unlock
+            </button>
+            <p
+                id="diary-key-status"
+                class="mt-3 text-sm text-(--gray-color) md:mt-0 md:min-w-36"
+                aria-live="polite"
+            >
+                Locked
+            </p>
+        </form>
 
-          <div class="space-y-8">
-            {entries.map((entry, index) => (
-              <article
-                id={entry.dateKey}
-                class="diary-card scroll-mt-24 rounded-3xl border border-black/10 bg-white/45 p-3 shadow-[0_18px_60px_rgba(15,18,25,0.08)] backdrop-blur-sm md:p-4"
-                data-diary-card={entry.dateKey}
-                data-diary-index={index}
-                hidden={!initialVisibleDateKeys.has(entry.dateKey)}
-              >
-                <div
-                  class="typst-diary-svg overflow-hidden rounded-2xl bg-[#fffdf7]"
-                  data-diary-entry={entry.dateKey}
-                  aria-busy="true"
-                >
-                  <p class="m-0 text-(--gray-color)">Enter the decipher key to render this entry.</p>
+        {
+            entries.length === 0 ? (
+                <p class="text-center text-(--gray-color) text-lg">
+                    No diary entries yet.
+                </p>
+            ) : (
+                <div class="grid grid-cols-1 lg:grid-cols-[11rem_minmax(0,1fr)] gap-8 lg:gap-12">
+                    <aside class="lg:sticky lg:top-24 lg:self-start">
+                        <h2 class="text-sm font-semibold uppercase tracking-[0.2em] text-(--gray-color) mb-4">
+                            Entries
+                        </h2>
+                        <nav class="flex lg:flex-col gap-2 overflow-x-auto pb-2 lg:pb-0">
+                            {entries.map((entry) => (
+                                <a
+                                    href={`#${entry.dateKey}`}
+                                    class="shrink-0 no-underline text-sm text-(--gray-color) hover:text-(--main-color) rounded-lg px-3 py-2 bg-(--paper-card-bg) hover:bg-black/10 transition-colors"
+                                >
+                                    {shortDateFormatter.format(entry.date)}
+                                </a>
+                            ))}
+                        </nav>
+                    </aside>
+
+                    <div class="space-y-8">
+                        {entries.map((entry, index) => (
+                            <article
+                                id={entry.dateKey}
+                                class="diary-card scroll-mt-24 rounded-3xl border border-black/10 bg-white/45 p-3 shadow-[0_18px_60px_rgba(15,18,25,0.08)] backdrop-blur-sm md:p-4"
+                                data-diary-card={entry.dateKey}
+                                data-diary-index={index}
+                                hidden={
+                                    !initialVisibleDateKeys.has(entry.dateKey)
+                                }
+                            >
+                                <div
+                                    class="typst-diary-svg overflow-hidden rounded-2xl bg-[#fffdf7]"
+                                    data-diary-entry={entry.dateKey}
+                                    aria-busy="true"
+                                >
+                                    <p class="m-0 text-(--gray-color)">
+                                        Enter the decipher key to render this
+                                        entry.
+                                    </p>
+                                </div>
+                            </article>
+                        ))}
+                    </div>
                 </div>
-              </article>
-            ))}
-          </div>
-        </div>
-    }
-  </main>
+            )
+        }
+    </main>
 
-  <script
-    id="diary-entries"
-    type="application/json"
-    set:html={clientEntriesJson}
-  />
+    <script
+        id="diary-entries"
+        type="application/json"
+        set:html={clientEntriesJson}
+    />
 </Layout>
 
 <style>
-  .diary-card {
-    transition:
-      transform 180ms ease,
-      box-shadow 180ms ease,
-      border-color 180ms ease;
-  }
+    .diary-card {
+        transition:
+            transform 180ms ease,
+            box-shadow 180ms ease,
+            border-color 180ms ease;
+    }
 
-  .diary-card:hover {
-    transform: translateY(-1px);
-    border-color: rgba(0, 0, 0, 0.14);
-    box-shadow: 0 22px 70px rgba(15, 18, 25, 0.11);
-  }
+    .diary-card:hover {
+        transform: translateY(-1px);
+        border-color: rgba(0, 0, 0, 0.14);
+        box-shadow: 0 22px 70px rgba(15, 18, 25, 0.11);
+    }
 
-  .typst-diary-svg {
-    min-height: 18rem;
-  }
+    .typst-diary-svg {
+        min-height: 18rem;
+    }
 
-  .typst-diary-svg :global(svg) {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
+    .typst-diary-svg :global(svg) {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
 </style>
 
 <script>
-  import { decryptGitCryptSource } from "../lib/gitCrypt";
-  import { createTypstCompiler } from "@myriaddreamin/typst.ts/compiler";
-  import { createTypstRenderer } from "@myriaddreamin/typst.ts/renderer";
-  import { preloadFontAssets } from "@myriaddreamin/typst.ts/options.init";
-  import compilerWasmUrl from "@myriaddreamin/typst-ts-web-compiler/wasm?url";
-  import rendererWasmUrl from "@myriaddreamin/typst-ts-renderer/wasm?url";
+    import { decryptGitCryptSource } from "../lib/gitCrypt";
+    import { createTypstCompiler } from "@myriaddreamin/typst.ts/compiler";
+    import { createTypstRenderer } from "@myriaddreamin/typst.ts/renderer";
+    import { preloadFontAssets } from "@myriaddreamin/typst.ts/options.init";
+    import compilerWasmUrl from "@myriaddreamin/typst-ts-web-compiler/wasm?url";
+    import rendererWasmUrl from "@myriaddreamin/typst-ts-renderer/wasm?url";
 
-  type ClientDiarySource = {
-    dateKey: string;
-    source: string;
-  };
+    type ClientDiarySource = {
+        dateKey: string;
+        source: string;
+    };
 
-  const diaryTypstPrelude = `#set page(
+    const diaryTypstPrelude = `#set page(
   width: 430pt,
   height: auto,
   margin: (x: 34pt, y: 38pt),
@@ -209,147 +224,159 @@ const initialVisibleDateKeys = new Set(
 )
 `;
 
-  const entriesElement = document.getElementById("diary-entries");
-  const entries = entriesElement?.textContent ?
-    JSON.parse(entriesElement.textContent) as ClientDiarySource[] :
-    [];
+    const entriesElement = document.getElementById("diary-entries");
+    const entries = entriesElement?.textContent
+        ? (JSON.parse(entriesElement.textContent) as ClientDiarySource[])
+        : [];
 
-  const form = document.getElementById("diary-key-form") as HTMLFormElement | null;
-  const keyInput = document.getElementById("diary-key") as HTMLInputElement | null;
-  const status = document.getElementById("diary-key-status");
-  const compiler = createTypstCompiler();
-  const renderer = createTypstRenderer();
-  const visibleEntryCount = 5;
-  const visibleIndexWindow = new Set<number>();
-  let unlockedKey: string | null = null;
-  let initPromise: Promise<unknown> | null = null;
+    const form = document.getElementById(
+        "diary-key-form",
+    ) as HTMLFormElement | null;
+    const keyInput = document.getElementById(
+        "diary-key",
+    ) as HTMLInputElement | null;
+    const status = document.getElementById("diary-key-status");
+    const compiler = createTypstCompiler();
+    const renderer = createTypstRenderer();
+    const visibleEntryCount = 5;
+    const visibleIndexWindow = new Set<number>();
+    let unlockedKey: string | null = null;
+    let initPromise: Promise<unknown> | null = null;
 
-  const initTypst = () => {
-    initPromise ??= Promise.all([
-      compiler.init({
-        beforeBuild: [
-          preloadFontAssets({
-            assets: ["text", "cjk"],
-          }),
-        ],
-        getModule: () => compilerWasmUrl,
-      }),
-      renderer.init({
-        getModule: () => rendererWasmUrl,
-      }),
-    ]);
+    const initTypst = () => {
+        initPromise ??= Promise.all([
+            compiler.init({
+                beforeBuild: [
+                    preloadFontAssets({
+                        assets: ["text", "cjk"],
+                    }),
+                ],
+                getModule: () => compilerWasmUrl,
+            }),
+            renderer.init({
+                getModule: () => rendererWasmUrl,
+            }),
+        ]);
 
-    return initPromise;
-  };
+        return initPromise;
+    };
 
-  const setStatus = (message: string) => {
-    if (status) {
-      status.textContent = message;
-    }
-  };
+    const setStatus = (message: string) => {
+        if (status) {
+            status.textContent = message;
+        }
+    };
 
-  const decryptSource = (source: string, key: string) =>
-    decryptGitCryptSource(source, key);
+    const decryptSource = (source: string, key: string) =>
+        decryptGitCryptSource(source, key);
 
-  const visibleRangeForIndex = (selectedIndex: number) => {
-    const firstIndex = Math.min(
-      Math.max(selectedIndex - 2, 0),
-      Math.max(entries.length - visibleEntryCount, 0),
-    );
-    const lastIndex = Math.min(firstIndex + visibleEntryCount, entries.length);
-    return { firstIndex, lastIndex };
-  };
+    const visibleRangeForIndex = (selectedIndex: number) => {
+        const firstIndex = Math.min(
+            Math.max(selectedIndex - 2, 0),
+            Math.max(entries.length - visibleEntryCount, 0),
+        );
+        const lastIndex = Math.min(
+            firstIndex + visibleEntryCount,
+            entries.length,
+        );
+        return { firstIndex, lastIndex };
+    };
 
-  const selectedIndexFromHash = () => {
-    const dateKey = decodeURIComponent(location.hash.slice(1));
-    const index = entries.findIndex((entry) => entry.dateKey === dateKey);
-    return index === -1 ? 0 : index;
-  };
+    const selectedIndexFromHash = () => {
+        const dateKey = decodeURIComponent(location.hash.slice(1));
+        const index = entries.findIndex((entry) => entry.dateKey === dateKey);
+        return index === -1 ? 0 : index;
+    };
 
-  const renderEntry = async (entry: ClientDiarySource, key: string) => {
-    const container = document.querySelector<HTMLElement>(
-      `[data-diary-entry="${entry.dateKey}"]`,
-    );
-    if (!container) {
-      return;
-    }
+    const renderEntry = async (entry: ClientDiarySource, key: string) => {
+        const container = document.querySelector<HTMLElement>(
+            `[data-diary-entry="${entry.dateKey}"]`,
+        );
+        if (!container) {
+            return;
+        }
 
-    container.setAttribute("aria-busy", "true");
-    container.innerHTML = `<p class="m-0 text-(--gray-color)">Rendering diary entry…</p>`;
+        container.setAttribute("aria-busy", "true");
+        container.innerHTML = `<p class="m-0 text-(--gray-color)">Rendering diary entry…</p>`;
 
-    const source = await decryptSource(entry.source, key);
-    const mainFilePath = `/diary/${entry.dateKey}.typ`;
-    compiler.addSource(mainFilePath, `${diaryTypstPrelude}\n${source}`);
+        const source = await decryptSource(entry.source, key);
+        const mainFilePath = `/diary/${entry.dateKey}.typ`;
+        compiler.addSource(mainFilePath, `${diaryTypstPrelude}\n${source}`);
 
-    const { result: vectorData, diagnostics } = await compiler.compile({
-      mainFilePath,
-      diagnostics: "unix",
+        const { result: vectorData, diagnostics } = await compiler.compile({
+            mainFilePath,
+            diagnostics: "unix",
+        });
+
+        if (!vectorData) {
+            container.removeAttribute("aria-busy");
+            container.innerText =
+                diagnostics?.join("\n") || "Typst compile failed.";
+            return;
+        }
+
+        const svg = await renderer.renderSvg({
+            format: "vector",
+            artifactContent: vectorData,
+        });
+
+        container.removeAttribute("aria-busy");
+        container.dataset.renderedWithKey = key;
+        container.innerHTML = svg;
+    };
+
+    const showSelectedEntryWindow = async () => {
+        const { firstIndex, lastIndex } = visibleRangeForIndex(
+            selectedIndexFromHash(),
+        );
+        visibleIndexWindow.clear();
+        for (let index = firstIndex; index < lastIndex; index += 1) {
+            visibleIndexWindow.add(index);
+        }
+
+        document
+            .querySelectorAll<HTMLElement>("[data-diary-card]")
+            .forEach((card) => {
+                const index = Number(card.dataset.diaryIndex);
+                card.hidden = !visibleIndexWindow.has(index);
+            });
+
+        if (!unlockedKey) {
+            return;
+        }
+
+        for (const index of visibleIndexWindow) {
+            const entry = entries[index];
+            const container = document.querySelector<HTMLElement>(
+                `[data-diary-entry="${entry.dateKey}"]`,
+            );
+            if (container?.dataset.renderedWithKey !== unlockedKey) {
+                await renderEntry(entry, unlockedKey);
+            }
+        }
+    };
+
+    form?.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const key = keyInput?.value ?? "";
+        if (!key) {
+            setStatus("Key required");
+            keyInput?.focus();
+            return;
+        }
+
+        setStatus("Loading compiler…");
+        await initTypst();
+
+        unlockedKey = key;
+        setStatus("Rendering…");
+        await showSelectedEntryWindow();
+        setStatus("Unlocked");
     });
 
-    if (!vectorData) {
-      container.removeAttribute("aria-busy");
-      container.innerText = diagnostics?.join("\n") || "Typst compile failed.";
-      return;
-    }
-
-    const svg = await renderer.renderSvg({
-      format: "vector",
-      artifactContent: vectorData,
-    });
-
-    container.removeAttribute("aria-busy");
-    container.dataset.renderedWithKey = key;
-    container.innerHTML = svg;
-  };
-
-  const showSelectedEntryWindow = async () => {
-    const { firstIndex, lastIndex } = visibleRangeForIndex(selectedIndexFromHash());
-    visibleIndexWindow.clear();
-    for (let index = firstIndex; index < lastIndex; index += 1) {
-      visibleIndexWindow.add(index);
-    }
-
-    document.querySelectorAll<HTMLElement>("[data-diary-card]").forEach((card) => {
-      const index = Number(card.dataset.diaryIndex);
-      card.hidden = !visibleIndexWindow.has(index);
-    });
-
-    if (!unlockedKey) {
-      return;
-    }
-
-    for (const index of visibleIndexWindow) {
-      const entry = entries[index];
-      const container = document.querySelector<HTMLElement>(
-        `[data-diary-entry="${entry.dateKey}"]`,
-      );
-      if (container?.dataset.renderedWithKey !== unlockedKey) {
-        await renderEntry(entry, unlockedKey);
-      }
-    }
-  };
-
-  form?.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const key = keyInput?.value ?? "";
-    if (!key) {
-      setStatus("Key required");
-      keyInput?.focus();
-      return;
-    }
-
-    setStatus("Loading compiler…");
-    await initTypst();
-
-    unlockedKey = key;
-    setStatus("Rendering…");
-    await showSelectedEntryWindow();
-    setStatus("Unlocked");
-  });
-
-  void showSelectedEntryWindow();
-  window.addEventListener("hashchange", () => {
     void showSelectedEntryWindow();
-  });
+    window.addEventListener("hashchange", () => {
+        void showSelectedEntryWindow();
+    });
 </script>
